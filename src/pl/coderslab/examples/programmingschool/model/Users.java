@@ -1,10 +1,12 @@
+package pl.coderslab.examples.programmingschool.model;
+
 public class Users {
 	
 	private	int	id;
 	private	String	username;
 	private	String	password;
 	private	String	email;
-	
+	private int person_group_id;
 	
 	
 	public	Users(String	username,	String	email,	String	password)	{
@@ -15,9 +17,7 @@ public class Users {
 
 	public	Users()	{}
 	
-	public	void	setPassword(String	password)	{
-		this.password	=	BCrypt.hashpw(password	,	BCrypt.gensalt());	;
-	}
+	
 	
 	
 }
