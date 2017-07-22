@@ -11,10 +11,10 @@ email VARCHAR(255) UNIQUE NOT NULL,
 password VARCHAR(245) NOT NULL,
 person_group_id INT,
 PRIMARY KEY(id),
-FOREIGN KEY(person_group_id) REFERENCES user_group(id) ON DELETE CASCADE
+FOREIGN KEY(person_group_id) REFERENCES User_group(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Excercise (
+CREATE TABLE Exercise (
 id INT AUTO_INCREMENT,
 title VARCHAR (255),
 description TEXT,
@@ -26,9 +26,9 @@ id INT AUTO_INCREMENT,
 created DATETIME,
 updated DATETIME,
 description TEXT,
-excercise_id INT,
+exercise_id INT,
 users_id BIGINT,
 PRIMARY KEY (id),
-FOREIGN KEY(excercise_id) REFERENCES excercise(id) ON DELETE CASCADE,
+FOREIGN KEY(exercise_id) REFERENCES exercise(id) ON DELETE CASCADE,
 FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE
 );
