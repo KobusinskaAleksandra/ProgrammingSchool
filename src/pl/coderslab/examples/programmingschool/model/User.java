@@ -94,6 +94,27 @@ public class User {
 		return	null;
 	}
 	
+	static public User [] loadUsersByGroupId(Connection conn, int id) throws SQLException {
+		ArrayList<User>	users	=	new	ArrayList<User>();
+		String	sql	=	"SELECT	*	FROM Users WHERE person_group_id=?";
+		PreparedStatement preparedStatement;
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, id);
+		ResultSet	resultSet	=	preparedStatement.executeQuery();
+		while	(resultSet.next())	{
+				User	loadedUser	=	new	User();
+				loadedUser.id	=	resultSet.getInt("id");
+				loadedUser.username	=	resultSet.getString("username");
+				loadedUser.password	=	resultSet.getString("password");
+				loadedUser.email	=	resultSet.getString("email");
+				loadedUser.person_group_id = resultSet.getInt("person_group_id");
+				users.add(loadedUser);
+		}
+		User[]	uArray	=	new	User[users.size()];
+		uArray	=	users.toArray(uArray);
+		return uArray;
+	}
+	
 	static	public	User[]	loadAllUsers(Connection	conn) throws SQLException	{
 		ArrayList<User>	users	=	new	ArrayList<User>();
 		String	sql	=	"SELECT	*	FROM	Users";
@@ -127,7 +148,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-	String userToString = "name: " + this.username + " email: " + this.email + " pass: " + this.password + "group: " + this.person_group_id;
+	String userToString = "name: " + this.username + " email: " + this.email + " group: " + this.person_group_id;
 	return userToString;
 	}
 }

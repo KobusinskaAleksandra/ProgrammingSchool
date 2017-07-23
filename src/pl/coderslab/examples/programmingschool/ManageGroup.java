@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import pl.coderslab.examples.programmingschool.model.Groups;
 
-public class MenageGroup {
+public class ManageGroup {
 	protected static void add() {
 		Connection conn = null;
 		try {

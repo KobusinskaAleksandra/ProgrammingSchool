@@ -104,4 +104,10 @@ public class Exercise {
 			}
 			
 		}
+		@Override
+		public String toString() {
+		String exerciseToString = "id:" + this.id +  " tytul: " + this.title + " ||  opis: " + this.description;
+		return exerciseToString;
+		}
+		
 }

@@ -93,4 +93,10 @@ public class Groups {
 			this.id=0;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String str="id:" + this.id + " name: " + this.name;
+		return str;
+	}
 }

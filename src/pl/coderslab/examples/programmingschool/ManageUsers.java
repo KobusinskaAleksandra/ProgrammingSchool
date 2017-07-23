@@ -2,11 +2,16 @@ package pl.coderslab.examples.programmingschool;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import pl.coderslab.examples.programmingschool.model.Groups;
 import pl.coderslab.examples.programmingschool.model.User;
 
-public class MenageUsers {
+public class ManageUsers {
 		
 	
 	protected static void add() {
@@ -147,4 +152,9 @@ public class MenageUsers {
 		
 	}
 
+	
+	
+	
+	
+			
 }

@@ -8,7 +8,7 @@ import java.util.Scanner;
 import pl.coderslab.examples.programmingschool.model.Exercise;
 import pl.coderslab.examples.programmingschool.model.Groups;
 
-public class MenageExercise {
+public class ManageExercise {
 	protected static void add() {
 		Connection conn = null;
 		try {

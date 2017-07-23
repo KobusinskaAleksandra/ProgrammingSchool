@@ -23,6 +23,14 @@ public class Solution {
 		this.exercise_id=exercise_id;
 		this.users_id=users_id;
 	}
+	
+	public Solution (Date created, int exercise_id, int users_id) {
+		this.created=created;
+		this.exercise_id=exercise_id;
+		this.users_id=users_id;
+	}
+	
+	
 	public Solution() {};
 
 	public Date getCreated() {
@@ -76,15 +84,15 @@ public class Solution {
 	
 	public void saveToDB(Connection	conn) throws SQLException {
 		if	(this.id == 0) {
-			String sql = "INSERT INTO Solution(create, updated, description, exercise_id, users_id) VALUES (?,?,?,?,?);";
+			String sql = "INSERT INTO Solution (created, updated, description, exercise_id, users_id) VALUES (?,?,?,?,?);";
 			String generatedColumns[] = {"ID"};
-			PreparedStatement preparedStatement;
+			PreparedStatement preparedStatement; 
 			preparedStatement = conn.prepareStatement(sql, generatedColumns); 
 			preparedStatement.setDate(1, this.created);
 			preparedStatement.setDate(2, this.updated);
 			preparedStatement.setString(3, this.description);
-			preparedStatement.setInt(1, this.exercise_id);
-			preparedStatement.setInt(1, this.users_id);
+			preparedStatement.setInt(4, this.exercise_id);
+			preparedStatement.setInt(5, this.users_id);
 			preparedStatement.executeUpdate();
 			ResultSet rs = preparedStatement.getGeneratedKeys();
 			if	(rs.next())	{

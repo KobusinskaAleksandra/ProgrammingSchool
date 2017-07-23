@@ -1,12 +1,25 @@
 package pl.coderslab.examples.programmingschool;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import pl.coderslab.examples.programmingschool.model.Exercise;
+import pl.coderslab.examples.programmingschool.model.Groups;
+import pl.coderslab.examples.programmingschool.model.User;
 
 public class Homepage {
 
 public static void main(String[] args) {
-	
-	Scanner scan = new Scanner(System.in);
+	Scanner scan = new Scanner (System.in);
+	Connection conn = null;
+	try {
+		conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
+		System.out.println("Połączenie ustanowione");
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
 	while(true) {
 		while(true) {
 		System.out.println("Witaj w programie do zarządzania bazą danych szkoły programowania. Wybierz, co chcesz teraz zrobić:");
@@ -16,6 +29,14 @@ public static void main(String[] args) {
 		System.out.println("4. Przypisz zadania");
 		int ans=scan.nextInt();
 			if(ans==1) {
+				System.out.println();
+				System.out.println("Lista wszystkich uzytkownikow: ");
+				User [] usr;
+				try {
+					usr = User.loadAllUsers(conn);
+					for(User us: usr) System.out.println(us.toString());
+				} catch (SQLException e) {}
+				System.out.println();
 				System.out.println("Zarzadzanie uzytkownikami");
 				System.out.println("1. Dodaj uzytkownika");
 				System.out.println("2. Edytuj uzytkownika");
@@ -23,18 +44,26 @@ public static void main(String[] args) {
 				System.out.println("4. Powrot do menu");
 					ans=scan.nextInt();
 					if(ans==1) {
-						MenageUsers.add();
+						ManageUsers.add();
 					}
 					else if(ans==2) {
-						MenageUsers.edit();
+						ManageUsers.edit();
 					}
 					else if(ans==3) {
-						MenageUsers.delete();
+						ManageUsers.delete();
 					}
 					else if(ans==4) {
 					}
 			}
 			else if(ans==2) {
+					System.out.println();
+					System.out.println("Lista wszystkich zadan: ");
+					Exercise[] exc;
+					try {
+						exc = Exercise.loadAllExercise(conn);
+						for(Exercise exercise: exc) System.out.println(exercise.toString());
+					} catch (SQLException e) {}
+					System.out.println();
 					System.out.println("Zarzadzanie zadaniami");
 					System.out.println("1. Dodaj zadanie");
 					System.out.println("2. Edytuj zadanie");
@@ -42,18 +71,26 @@ public static void main(String[] args) {
 					System.out.println("4. Powrot do menu");
 					ans=scan.nextInt();
 					if(ans==1) {
-						MenageExercise.add();
+						ManageExercise.add();
 					}
 					else if(ans==2) {
-						MenageExercise.edit();
+						ManageExercise.edit();
 					}
 					else if(ans==3) {
-						MenageExercise.delete();
+						ManageExercise.delete();
 					}
 					else if(ans==4) {
 					}
 			}
 			else if (ans==3) {
+					System.out.println();
+					System.out.println("Lista wszystkich grup: ");
+					Groups [] group;
+					try {
+						group = Groups.loadAllGroups(conn);
+						for(Groups gr: group) System.out.println(gr.toString());
+					} catch (SQLException e) {}
+					System.out.println();
 					System.out.println("Zarzadzanie grupami uzytkownikow");
 					System.out.println("1. Dodaj grupe");
 					System.out.println("2. Edytuj grupe");
@@ -61,13 +98,13 @@ public static void main(String[] args) {
 					System.out.println("4. Powrot do menu");
 					ans=scan.nextInt();
 					if(ans==1) {
-						MenageGroup.add();
+						ManageGroup.add();
 					}
 					else if(ans==2) {
-						MenageGroup.edit();
+						ManageGroup.edit();
 					}
 					else if(ans==3) {
-						MenageGroup.delete();
+						ManageGroup.delete();
 					}
 					else if(ans==4) {
 					}
@@ -78,21 +115,32 @@ public static void main(String[] args) {
 					System.out.println("1. Dodaj zadanie do uzytkownika");
 					System.out.println("2. Dodaj zadanie do grupy uzytkownikow");
 					System.out.println("3. Przeglad rozwiazan");
-					System.out.println("4. Usun grupe");
+					System.out.println("4. Powrot do menu");
 					ans=scan.nextInt();
 					if(ans==1) {
-						MenageSolution.add();
+						ManageSolution.addToUser();
 					}
 					else if(ans==2) {
-						MenageSolution.edit();
+						ManageSolution.addToGroup();
 					}
 					else if(ans==3) {
-						MenageSolution.delete();
+						System.out.println();
+						System.out.println("Przeglad rozwiazan");
+						System.out.println("1. Przeglad rozwiazan wybranego uzytkownika");
+						System.out.println("2. Przeglad rozwiazan grupy uzytkownikow");
+						ans=scan.nextInt();
+						if(ans==1) {
+							ManageSolution.selectAllForUser();
+						}
+						else if(ans==2) {
+							ManageSolution.selectAllForGroup();
+						}
 					}
 					else if(ans==4) {
 					}
 			}
 		}
 	}
-	}
+	
+}
 }
