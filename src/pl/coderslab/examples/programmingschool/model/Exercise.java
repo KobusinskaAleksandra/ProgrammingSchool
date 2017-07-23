@@ -46,7 +46,17 @@ public class Exercise {
 			}
 			preparedStatement.close();
 			}
-		}
+		else {
+			String	sql	= "UPDATE Exercise SET title=?, description=? where id = ?";
+			PreparedStatement	preparedStatement;
+			preparedStatement	=	conn.prepareStatement(sql);
+			preparedStatement.setString(1,	this.title);
+			preparedStatement.setString(2, this.description);
+			preparedStatement.setInt(3,	this.id);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			}
+	}
 
 		static public Exercise loadExerciseById(Connection conn, int id) throws SQLException {
 			String sql = "SELECT * FROM	Exercise where id=?";

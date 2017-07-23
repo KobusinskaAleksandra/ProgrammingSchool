@@ -16,10 +16,12 @@ public class User {
 	private	String	email;
 	private int person_group_id;
 	
-	public	User(String username, String email, String password) {
+	public	User(String username, String email, String password, int person_group_id) {
 		this.username = username;
 		this.email = email;
-		this.setPassword(password);		
+		this.person_group_id=person_group_id;
+		this.setPassword(password);	
+		
 	}
 	public	User()	{}
 	public String getUsername() {
@@ -45,20 +47,33 @@ public class User {
 	
 	public void saveToDB(Connection	conn) throws SQLException	{
 		if	(this.id == 0) {
-				String sql = "INSERT INTO Users(username, email, password) VALUES (?, ?, ?);";
+				String sql = "INSERT INTO Users(username, email, password, person_group_id) VALUES (?, ?, ?, ?);";
 				String generatedColumns[] = {"ID"};
 				PreparedStatement preparedStatement;
 				preparedStatement = conn.prepareStatement(sql, generatedColumns);
 				preparedStatement.setString(1, this.username);
 				preparedStatement.setString(2, this.email);
 				preparedStatement.setString(3, this.password);
+				preparedStatement.setInt(4, this.person_group_id);
 				preparedStatement.executeUpdate();
 				ResultSet rs = preparedStatement.getGeneratedKeys();
 				if	(rs.next())	{
 					this.id	= rs.getInt(1);
-				}
+					}
 				preparedStatement.close();
-		}
+				}
+		else	{
+				String	sql	=	"UPDATE	Users	SET	username=?,	email=?,	password=?, person_group_id=?	where	id	=	?";
+				PreparedStatement	preparedStatement;
+				preparedStatement	=	conn.prepareStatement(sql);
+				preparedStatement.setString(1,	this.username);
+				preparedStatement.setString(2,	this.email);
+				preparedStatement.setString(3,	this.password);
+				preparedStatement.setInt(4, this.person_group_id);
+				preparedStatement.setInt(5,	this.id);
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+			}
 	}
 
 	static public User loadUserById(Connection conn, int id) throws SQLException {
@@ -73,6 +88,7 @@ public class User {
 				loadedUser.username	= resultSet.getString("username");
 				loadedUser.password	= resultSet.getString("password");
 				loadedUser.email = resultSet.getString("email");
+				loadedUser.person_group_id = resultSet.getInt("person_group_id");
 				return	loadedUser;
 		}
 		return	null;
@@ -90,6 +106,7 @@ public class User {
 				loadedUser.username	=	resultSet.getString("username");
 				loadedUser.password	=	resultSet.getString("password");
 				loadedUser.email	=	resultSet.getString("email");
+				loadedUser.person_group_id = resultSet.getInt("person_group_id");
 				users.add(loadedUser);
 		}
 		User[]	uArray	=	new	User[users.size()];
@@ -110,7 +127,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-	String userToString = "name: " + this.username + " email: " + this.email + " pass: " + this.password;
+	String userToString = "name: " + this.username + " email: " + this.email + " pass: " + this.password + "group: " + this.person_group_id;
 	return userToString;
 	}
 }

@@ -10,11 +10,11 @@ public class Groups {
 	private int id;
 	private String name;
 	
-	Groups(String name) {
+	public Groups(String name) {
 		this.name=name;
 	}
 	
-	Groups() {}
+	public Groups() {}
 	
 	public String getName() {
 		return name;
@@ -38,6 +38,15 @@ public class Groups {
 		if	(rs.next())	{
 			this.id	= rs.getInt(1);
 		}
+		preparedStatement.close();
+		}
+	else {
+		String	sql	= "UPDATE User_group SET name=? where id = ?";
+		PreparedStatement	preparedStatement;
+		preparedStatement	=	conn.prepareStatement(sql);
+		preparedStatement.setString(1,	this.name);
+		preparedStatement.setInt(2,	this.id);
+		preparedStatement.executeUpdate();
 		preparedStatement.close();
 		}
 	}
@@ -76,7 +85,7 @@ public class Groups {
 
 	public void delete(Connection conn) throws SQLException	{
 		if (this.id != 0) {
-			String	sql	= "DELETE FROM User_group WHERE id= ?";
+			String	sql	= "DELETE FROM User_group WHERE id=?";
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setInt(1, this.id);
@@ -84,5 +93,4 @@ public class Groups {
 			this.id=0;
 		}
 	}
-
 }

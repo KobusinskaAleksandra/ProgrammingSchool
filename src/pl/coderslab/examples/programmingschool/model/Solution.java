@@ -169,7 +169,7 @@ public class Solution {
 
 		static public Solution[] loadAllByExerciseId (Connection conn, int id) throws SQLException	{
 			ArrayList<Solution> exerciseSolution = new ArrayList<Solution>();
-			String	sql	= "SELECT * FROM Solution where user_id=?";
+			String	sql	= "SELECT * FROM Solution where exercise_id=?";
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setInt(1, id);

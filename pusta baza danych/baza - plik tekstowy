@@ -29,6 +29,6 @@ description TEXT,
 exercise_id INT,
 users_id BIGINT,
 PRIMARY KEY (id),
-FOREIGN KEY(exercise_id) REFERENCES exercise(id) ON DELETE CASCADE,
-FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE
+FOREIGN KEY(exercise_id) REFERENCES Exercise(id) ON DELETE CASCADE,
+FOREIGN KEY(users_id) REFERENCES Users(id) ON DELETE CASCADE
 );

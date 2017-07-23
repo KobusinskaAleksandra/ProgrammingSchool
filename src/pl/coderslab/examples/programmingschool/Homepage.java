@@ -1,8 +1,5 @@
 package pl.coderslab.examples.programmingschool;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Homepage {
@@ -11,6 +8,7 @@ public static void main(String[] args) {
 	
 	Scanner scan = new Scanner(System.in);
 	while(true) {
+		while(true) {
 		System.out.println("Witaj w programie do zarządzania bazą danych szkoły programowania. Wybierz, co chcesz teraz zrobić:");
 		System.out.println("1. Zarzadzaj uzytkownikami");
 		System.out.println("2. Zarzadzaj zadaniami");
@@ -18,13 +16,11 @@ public static void main(String[] args) {
 		System.out.println("4. Przypisz zadania");
 		int ans=scan.nextInt();
 			if(ans==1) {
-				while(true) {
 				System.out.println("Zarzadzanie uzytkownikami");
 				System.out.println("1. Dodaj uzytkownika");
 				System.out.println("2. Edytuj uzytkownika");
 				System.out.println("3. Usun uzytkownika");
 				System.out.println("4. Powrot do menu");
-				
 					ans=scan.nextInt();
 					if(ans==1) {
 						MenageUsers.add();
@@ -36,12 +32,9 @@ public static void main(String[] args) {
 						MenageUsers.delete();
 					}
 					else if(ans==4) {
-					break;	
 					}
-				}
 			}
 			else if(ans==2) {
-				while(true) {
 					System.out.println("Zarzadzanie zadaniami");
 					System.out.println("1. Dodaj zadanie");
 					System.out.println("2. Edytuj zadanie");
@@ -58,12 +51,9 @@ public static void main(String[] args) {
 						MenageExercise.delete();
 					}
 					else if(ans==4) {
-					break;	
 					}
-				}
 			}
 			else if (ans==3) {
-				while(true) {
 					System.out.println("Zarzadzanie grupami uzytkownikow");
 					System.out.println("1. Dodaj grupe");
 					System.out.println("2. Edytuj grupe");
@@ -80,16 +70,15 @@ public static void main(String[] args) {
 						MenageGroup.delete();
 					}
 					else if(ans==4) {
-					break;	
 					}
-				}
+					
 			}
 			else if (ans==4) {
 					System.out.println("Przypisywanie zadan");
 					System.out.println("1. Dodaj zadanie do uzytkownika");
 					System.out.println("2. Dodaj zadanie do grupy uzytkownikow");
 					System.out.println("3. Przeglad rozwiazan");
-					System.out.println("6. Usun grupe");
+					System.out.println("4. Usun grupe");
 					ans=scan.nextInt();
 					if(ans==1) {
 						MenageSolution.add();
@@ -101,11 +90,9 @@ public static void main(String[] args) {
 						MenageSolution.delete();
 					}
 					else if(ans==4) {
-					break;	
 					}
-				}
-			break;
+			}
 		}
-	scan.close();
+	}
 	}
 }
