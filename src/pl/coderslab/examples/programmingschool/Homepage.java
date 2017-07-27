@@ -38,16 +38,21 @@ public static void main(String[] args) {
 					switch(scan.nextInt()) {
 					case 1: {
 						ManageUsers.add();
+						break;
 					}
 					case 2: {
 						ManageUsers.edit();
+						break;
 					}
 					case 3: {
 						ManageUsers.delete();
+						break;
 					}
 					case 4: {
+						break;
 					}
 					}
+					break;
 			}
 		case 2:  {
 					System.out.println();
@@ -66,16 +71,21 @@ public static void main(String[] args) {
 					switch(scan.nextInt()) {
 					case 1: {
 						ManageExercise.add();
+						break;
 					}
 					case 2: {
 						ManageExercise.edit();
+						break;
 					}
 					case 3: {
 						ManageExercise.delete();
+						break;
 					}
 					case 4: {
+						break;
 					}
 					}
+					break;
 			}
 		case 3:  {
 					System.out.println();
@@ -94,17 +104,21 @@ public static void main(String[] args) {
 					switch(scan.nextInt()) {
 					case 1: {
 						ManageGroup.add();
+						break;
 					}
 					case 2: {
 						ManageGroup.edit();
+						break;
 					}
 					case 3: {
 						ManageGroup.delete();
+						break;
 					}
 					case 4: {
+						break;
 					}
 					}
-					
+					break;
 			}
 		case 4: {
 					System.out.println("Przypisywanie zadan");
@@ -115,9 +129,11 @@ public static void main(String[] args) {
 					switch(scan.nextInt()) {
 					case 1: {
 						ManageSolution.addToUser();
+						break;
 					}
 					case 2: {
 						ManageSolution.addToGroup();
+						break;
 					}
 					case 3: {
 						System.out.println();
@@ -127,22 +143,25 @@ public static void main(String[] args) {
 							switch(scan.nextInt()) {
 							case 1: {
 								ManageSolution.selectAllForUser();
+								break;
 							}
 							case 2: {
 								ManageSolution.selectAllForGroup();
+								break;
 							}
 							}
 					}
 					case 4: {
-					
+						break;
 					}
 					}
+					break;
 				}
 		case 5: {	
-				break;
+				return;
 			}
+		
 		}
-		scan.close();
 	}
 }
 }
