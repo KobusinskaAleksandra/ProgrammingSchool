@@ -1,0 +1,21 @@
+INSERT INTO User_group VALUES (default, 'JAVA');
+INSERT INTO User_group VALUES (default, 'PYTHON');
+INSERT INTO User_group VALUES (default, 'PHP');
+
+INSERT INTO Users VALUES (default, 'Anna Kowalska', 'kowalska@gmail.com', 'kowalska', 1);
+INSERT INTO Users VALUES (default, 'Jan Nowak', 'nowak@gmail.com', 'nowak', 1);
+INSERT INTO Users VALUES (default, 'Agnieszka Nowak', 'nowakAga@gmail.com', 'nowakagnieszka', 2);
+INSERT INTO Users VALUES (default, 'Szymon Janiak', 'janiak@gmail.com', 'janiak', 2);
+INSERT INTO Users VALUES (default, 'Jacek Slowik', 'slowik@gmail.com', 'slowik', 3);
+
+
+INSERT INTO Exercise VALUES (default, 'Pole kwadratu', 'Oblicz pole kwadratu');
+INSERT INTO Exercise VALUES (default, 'Pole prostokata', 'Oblicz pole prostokata');
+INSERT INTO Exercise VALUES (default, 'Obwod kola', 'Oblicz obwod kola');
+INSERT INTO Exercise VALUES (default, 'Objetosc szescianu', 'Oblicz objetosc szescianu');
+
+INSERT INTO Solution VALUES (default, Now(), default, default, 1, 2);
+INSERT INTO Solution VALUES (default, Now(), default, default, 2, 3);
+INSERT INTO Solution VALUES (default, Now(), default, default, 3, 4);
+INSERT INTO Solution VALUES (default, Now(), default, default, 4, 5);
+INSERT INTO Solution VALUES (default, Now(), default, default, 5, 1);
