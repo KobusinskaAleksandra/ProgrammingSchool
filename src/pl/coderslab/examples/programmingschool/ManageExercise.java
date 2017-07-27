@@ -1,22 +1,13 @@
 package pl.coderslab.examples.programmingschool;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
 import pl.coderslab.examples.programmingschool.model.Exercise;
-import pl.coderslab.examples.programmingschool.model.Groups;
 
 public class ManageExercise {
 	protected static void add() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		Scanner scan= new Scanner(System.in);
 		String title = "";
 		String description="";
@@ -30,7 +21,7 @@ public class ManageExercise {
 		String ans=scan.next();
 		if(ans.equalsIgnoreCase("tak")) {
 			try {
-				exercise.saveToDB(conn);
+				exercise.saveToDB();
 				System.out.println("Dodano zadanie");
 				break;
 			} catch (SQLException e) {
@@ -44,19 +35,12 @@ public class ManageExercise {
 		}
 
 	protected static void edit() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj numer zadanie ktore chcesz edytowac");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		Exercise exercise = new Exercise();
 		try {
-			exercise=Exercise.loadExerciseById(conn, id);
+			exercise=Exercise.loadExerciseById(id);
 			String title = exercise.getTitle();
 			String description = exercise.getDescription();
 			String ans;
@@ -74,7 +58,7 @@ public class ManageExercise {
 				description=ans;
 				exercise.setDescription(description);
 			}
-			exercise.saveToDB(conn);
+			exercise.saveToDB();
 			System.out.println("Zmieniono zadanie");
 		} catch (SQLException e) {
 			System.out.println("Wystapil problem. Sprobuj ponownie");
@@ -83,19 +67,12 @@ public class ManageExercise {
 	}
 
 	protected static void delete() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj numer zadania, ktore chcesz usunac");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		Exercise exercise = new Exercise();
 		try {
-			exercise=Exercise.loadExerciseById(conn, id);
+			exercise=Exercise.loadExerciseById(id);
 			String title = exercise.getTitle();
 			String ans;
 			System.out.println("Dane: id: " + id + ", tytul: " + title);
@@ -103,13 +80,11 @@ public class ManageExercise {
 			scan.nextLine();
 			ans=scan.nextLine();
 			if(ans.equalsIgnoreCase("tak")) { 
-				exercise.delete(conn);
+				exercise.delete();
 				System.out.println("Usunieto zadanie");
 			}
 		} catch (SQLException e) {
 			System.out.println("Wystapil problem. Sprobuj ponownie");
 		}
 	}
-	
-
 }

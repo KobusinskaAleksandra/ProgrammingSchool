@@ -3,7 +3,10 @@ package pl.coderslab.examples.programmingschool;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthSeparatorUI;
@@ -16,26 +19,19 @@ import pl.coderslab.examples.programmingschool.model.User;
 public class ManageSolution {
 
 	protected static void addToUser() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		Scanner scan= new Scanner(System.in);
 		int nbExc=0;
 		int nbUsr=0;
 		java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
 		while (true) {
 		try {
-			Exercise [] exc = Exercise.loadAllExercise(conn);
+			Exercise [] exc = Exercise.loadAllExercise();
 			for(Exercise exercise: exc) System.out.println(exercise.toString());
 		System.out.println();
 		System.out.println("Podaj numer zadania: ");
 		nbExc=scan.nextInt();
 		System.out.println("Podaj numer uzytkownika: ");
-		User [] user = User.loadAllUsers(conn);
+		User [] user = User.loadAllUsers();
 		for(User ur: user) System.out.println(ur.toString());
 		nbUsr=scan.nextInt();
 		} catch (SQLException e1) {
@@ -46,7 +42,7 @@ public class ManageSolution {
 		Solution solution = new Solution (sqlDate, null, "", nbExc, nbUsr);
 		if(ans.equalsIgnoreCase("tak")) {
 			try {
-				solution.saveToDB(conn);
+				solution.saveToDB();
 				break;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -60,21 +56,14 @@ public class ManageSolution {
 
 	protected static void addToGroup() {
 		Scanner scan = new Scanner (System.in);
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj numer grupy, ktorej chcesz przypisac zadanie");
 		int id = scan.nextInt();
 		User[] users;
 		try {			
-			users = User.loadUsersByGroupId(conn, id);
+			users = User.loadUsersByGroupId(id);
 			java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
 			int nbExc=0;
-			Exercise [] exc = Exercise.loadAllExercise(conn);
+			Exercise [] exc = Exercise.loadAllExercise();
 			for(Exercise exercise: exc) System.out.println(exercise.toString());
 			System.out.println("Podaj numer zadania: ");
 			nbExc=scan.nextInt();
@@ -84,7 +73,7 @@ public class ManageSolution {
 			for(User user: users) {
 				Solution solution = new Solution (sqlDate, null, "", nbExc, user.getId());
 					try {
-						solution.saveToDB(conn);
+						solution.saveToDB();
 						System.out.println("Dodano zadanie dla grupy");
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -95,12 +84,31 @@ public class ManageSolution {
 			e.printStackTrace();
 		}
 		}
-
 	protected static void selectAllForUser() {
+		Scanner scan = new Scanner (System.in);
+		int id = 0;
+		System.out.println("Podaj id uzytkownika, ktorego rozwiazania chcesz wyswietlic: ");
+		id=scan.nextInt();
+		try {
+			Solution[] sol=Solution.loadAllByUserId(id);
+			for(Solution sl: sol) System.out.println(sl.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
+
 	protected static void selectAllForGroup() {
-		
+		Scanner scan = new Scanner (System.in);
+		int id = 0;
+		System.out.println("Podaj id grupy, ktoj rozwiazania chcesz wyswietlic: ");
+		id=scan.nextInt();
+		try {
+			Solution[] sol=Solution.loadAllByGroupId(id);
+			for(Solution sl: sol) System.out.println(sl.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

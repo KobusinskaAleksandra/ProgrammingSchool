@@ -9,13 +9,6 @@ import pl.coderslab.examples.programmingschool.model.Groups;
 
 public class ManageGroup {
 	protected static void add() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		Scanner scan= new Scanner(System.in);
 		String name = "";
 		while (true) {
@@ -26,7 +19,7 @@ public class ManageGroup {
 		String ans=scan.next();
 		if(ans.equalsIgnoreCase("tak")) {
 			try {
-				group.saveToDB(conn);
+				group.saveToDB();
 				break;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -40,19 +33,12 @@ public class ManageGroup {
 	
 
 	protected static void edit() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj numer grupy, ktora chcesz edytowac");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		Groups group = new Groups();
 		try {
-			group=Groups.loadGroupById(conn, id);
+			group=Groups.loadGroupById(id);
 			String name = group.getName();
 			String ans;
 			System.out.println("Dane: id: " + id + ", name: " + name);
@@ -63,7 +49,7 @@ public class ManageGroup {
 				name=ans;
 				group.setName(name);
 			}
-			group.saveToDB(conn);
+			group.saveToDB();
 			System.out.println("Zmieniono dane grupy. Nowa nazwa: " + name);
 		} catch (SQLException e) {
 			System.out.println("Wystapil problem. Sprobuj ponownie");
@@ -72,19 +58,12 @@ public class ManageGroup {
 	}
 
 	protected static void delete() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj numer grupy, ktora chcesz usunac");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		Groups group = new Groups();
 		try {
-			group=Groups.loadGroupById(conn, id);
+			group=Groups.loadGroupById(id);
 			String name = group.getName();
 			String ans;
 			System.out.println("Dane: id: " + id + ", name: " + name);
@@ -92,7 +71,7 @@ public class ManageGroup {
 			scan.nextLine();
 			ans=scan.nextLine();
 			if(ans.equalsIgnoreCase("tak")) { 
-				group.delete(conn);
+				group.delete();
 				System.out.println("Usunieto grupe");
 			}
 		} catch (SQLException e) {

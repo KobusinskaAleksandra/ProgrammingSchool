@@ -1,12 +1,13 @@
 package pl.coderslab.examples.programmingschool.model;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
+
+import pl.coderslab.examples.programmingschool.Connect;
 
 public class User {
 	
@@ -45,12 +46,12 @@ public class User {
 		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 	
-	public void saveToDB(Connection	conn) throws SQLException	{
+	public void saveToDB() throws SQLException	{
 		if	(this.id == 0) {
 				String sql = "INSERT INTO Users(username, email, password, person_group_id) VALUES (?, ?, ?, ?);";
 				String generatedColumns[] = {"ID"};
 				PreparedStatement preparedStatement;
-				preparedStatement = conn.prepareStatement(sql, generatedColumns);
+				preparedStatement = Connect.connect().prepareStatement(sql, generatedColumns);
 				preparedStatement.setString(1, this.username);
 				preparedStatement.setString(2, this.email);
 				preparedStatement.setString(3, this.password);
@@ -65,7 +66,7 @@ public class User {
 		else	{
 				String	sql	=	"UPDATE	Users	SET	username=?,	email=?,	password=?, person_group_id=?	where	id	=	?";
 				PreparedStatement	preparedStatement;
-				preparedStatement	=	conn.prepareStatement(sql);
+				preparedStatement	=	Connect.connect().prepareStatement(sql);
 				preparedStatement.setString(1,	this.username);
 				preparedStatement.setString(2,	this.email);
 				preparedStatement.setString(3,	this.password);
@@ -76,10 +77,10 @@ public class User {
 			}
 	}
 
-	static public User loadUserById(Connection conn, int id) throws SQLException {
+	static public User loadUserById(int id) throws SQLException {
 		String sql = "SELECT * FROM	Users WHERE id=?";
 		PreparedStatement preparedStatement;
-		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement = Connect.connect().prepareStatement(sql);
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
@@ -94,11 +95,11 @@ public class User {
 		return	null;
 	}
 	
-	static public User [] loadUsersByGroupId(Connection conn, int id) throws SQLException {
+	static public User [] loadUsersByGroupId(int id) throws SQLException {
 		ArrayList<User>	users	=	new	ArrayList<User>();
 		String	sql	=	"SELECT	*	FROM Users WHERE person_group_id=?";
 		PreparedStatement preparedStatement;
-		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement = Connect.connect().prepareStatement(sql);
 		preparedStatement.setInt(1, id);
 		ResultSet	resultSet	=	preparedStatement.executeQuery();
 		while	(resultSet.next())	{
@@ -115,11 +116,11 @@ public class User {
 		return uArray;
 	}
 	
-	static	public	User[]	loadAllUsers(Connection	conn) throws SQLException	{
+	static	public	User[]	loadAllUsers() throws SQLException	{
 		ArrayList<User>	users	=	new	ArrayList<User>();
 		String	sql	=	"SELECT	*	FROM	Users";
 		PreparedStatement	preparedStatement;
-		preparedStatement	=	conn.prepareStatement(sql);
+		preparedStatement	=	Connect.connect().prepareStatement(sql);
 		ResultSet	resultSet	=	preparedStatement.executeQuery();
 		while	(resultSet.next())	{
 				User	loadedUser	=	new	User();
@@ -135,11 +136,11 @@ public class User {
 		return uArray;
 	}
 
-	public void delete(Connection conn) throws SQLException	{
+	public void delete() throws SQLException	{
 		if (this.id != 0) {
 			String	sql	= "DELETE FROM Users WHERE id= ?";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			preparedStatement.setInt(1, this.id);
 			preparedStatement.executeUpdate();
 			this.id=0;
@@ -148,7 +149,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-	String userToString = "name: " + this.username + " email: " + this.email + " group: " + this.person_group_id;
+	String userToString =this.id + ": " + this.username + "|| email: " + this.email + "|| group: " + this.person_group_id;
 	return userToString;
 	}
 }

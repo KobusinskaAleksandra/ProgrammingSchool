@@ -15,14 +15,7 @@ public class ManageUsers {
 		
 	
 	protected static void add() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
-		Scanner scan= new Scanner(System.in);
+			Scanner scan= new Scanner(System.in);
 		String username = "";
 		String email = "";
 		int person_group_id;
@@ -50,7 +43,9 @@ public class ManageUsers {
 		String ans=scan.next();
 		if(ans.equalsIgnoreCase("tak")) {
 			try {
-				user.saveToDB(conn);
+				user.saveToDB();
+				System.out.println("Dodano uzytkownika");
+				System.out.println();
 				break;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -63,19 +58,12 @@ public class ManageUsers {
 		}
 	
 	protected static void edit() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		System.out.println("Podaj id uzytkownika, ktorego dane chcesz zmienic");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		User user = new User();
 		try {
-			user=User.loadUserById(conn, id);
+			user=User.loadUserById(id);
 			String username = user.getUsername();
 			String email = user.getEmail();
 			int person_group_id=user.getPerson_group_id();
@@ -116,7 +104,7 @@ public class ManageUsers {
 				person_group_id=ans2;						
 				user.setPerson_group_id(person_group_id);
 				}		
-			user.saveToDB(conn);
+			user.saveToDB();
 			System.out.println("Zmieniono dane uzytkownika. Nowe dane: username: " + username + ", email: " + email + ", group:" + person_group_id);
 		} catch (SQLException e) {
 			System.out.println("Wystapil problem. Sprobuj ponownie");
@@ -126,13 +114,6 @@ public class ManageUsers {
 	}
 
 	protected static void delete() {
-		Connection conn = null;
-		try {
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-			System.out.println("Połączenie ustanowione");
-			} catch (SQLException e) {
-			e.printStackTrace();
-			}
 		Scanner scan= new Scanner (System.in);
 		int id;
 		System.out.println("Podaj id uzytkownika, ktorego chcesz usunac: ");
@@ -140,10 +121,10 @@ public class ManageUsers {
 		scan.nextLine();
 		try {
 			User user = new User();
-			user=User.loadUserById(conn, id);
+			user=User.loadUserById(id);
 			System.out.println("Czy na pewno chcesz usunac uzytkownika " + user.getUsername() + ", email: " + user.getEmail());
 			if(scan.nextLine().equalsIgnoreCase("tak")) {
-				user.delete(conn);
+				user.delete();
 				System.out.println("Usunieto uzytkownika z bazy");
 			}
 		} catch (SQLException e) {
@@ -152,9 +133,4 @@ public class ManageUsers {
 		
 	}
 
-	
-	
-	
-	
-			
 }

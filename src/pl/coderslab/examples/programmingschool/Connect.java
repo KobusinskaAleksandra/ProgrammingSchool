@@ -5,16 +5,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connect {
-
+	Connection connect = connect(); 
+	
 	public static Connection connect() {
-		Connection	conn = null;
-	try {
-		conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-		System.out.println("Połączenie ustanowione");
+		Connection connect = null;
+		try {
+		connect=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty?autoReconnect=true&useSSL=false", "root", "coderslab");
 		} catch (SQLException e) {
 		e.printStackTrace();
 		}
-	return conn;
+		return connect;
 	}
 
 }

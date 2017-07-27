@@ -1,10 +1,11 @@
 package pl.coderslab.examples.programmingschool.model;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import pl.coderslab.examples.programmingschool.Connect;
 
 public class Exercise {
 	private int id;
@@ -31,12 +32,13 @@ public class Exercise {
 		this.description = description;
 	}
 	
-	public void saveToDB(Connection	conn) throws SQLException {
+	public void saveToDB() throws SQLException {
 		if	(this.id == 0) {
+			
 			String sql = "INSERT INTO Exercise(title, description) VALUES (?,?);";
 			String generatedColumns[] = {"ID"};
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql, generatedColumns);
+			preparedStatement = Connect.connect().prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1, this.title);
 			preparedStatement.setString(2, this.description);
 			preparedStatement.executeUpdate();
@@ -49,7 +51,7 @@ public class Exercise {
 		else {
 			String	sql	= "UPDATE Exercise SET title=?, description=? where id = ?";
 			PreparedStatement	preparedStatement;
-			preparedStatement	=	conn.prepareStatement(sql);
+			preparedStatement	=	Connect.connect().prepareStatement(sql);
 			preparedStatement.setString(1,	this.title);
 			preparedStatement.setString(2, this.description);
 			preparedStatement.setInt(3,	this.id);
@@ -58,10 +60,10 @@ public class Exercise {
 			}
 	}
 
-		static public Exercise loadExerciseById(Connection conn, int id) throws SQLException {
+		static public Exercise loadExerciseById(int id) throws SQLException {
 			String sql = "SELECT * FROM	Exercise where id=?";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
@@ -74,11 +76,11 @@ public class Exercise {
 			return	null;
 		}
 		
-		static	public Exercise[] loadAllExercise(Connection conn) throws SQLException	{
+		static	public Exercise[] loadAllExercise() throws SQLException	{
 			ArrayList<Exercise> exercise = new ArrayList<Exercise>();
 			String	sql	= "SELECT * FROM Exercise";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 					Exercise loadedExercise = new Exercise();
@@ -93,11 +95,11 @@ public class Exercise {
 		}
 				
 
-		public void delete(Connection conn) throws SQLException	{
+		public void delete() throws SQLException	{
 			if (this.id != 0) {
 				String	sql	= "DELETE FROM Exercise WHERE id= ?";
 				PreparedStatement preparedStatement;
-				preparedStatement = conn.prepareStatement(sql);
+				preparedStatement = Connect.connect().prepareStatement(sql);
 				preparedStatement.setInt(1, this.id);
 				preparedStatement.executeUpdate();
 				this.id=0;

@@ -1,7 +1,6 @@
 package pl.coderslab.examples.programmingschool;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -13,27 +12,21 @@ public class Homepage {
 
 public static void main(String[] args) {
 	Scanner scan = new Scanner (System.in);
-	Connection conn = null;
-	try {
-		conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/Warsztaty", "root", "coderslab");
-		System.out.println("Połączenie ustanowione");
-		} catch (SQLException e) {
-		e.printStackTrace();
-		}
+	Connect.connect();
 	while(true) {
-		while(true) {
 		System.out.println("Witaj w programie do zarządzania bazą danych szkoły programowania. Wybierz, co chcesz teraz zrobić:");
 		System.out.println("1. Zarzadzaj uzytkownikami");
 		System.out.println("2. Zarzadzaj zadaniami");
 		System.out.println("3. Zarzadzaj grupami użytkownikow");
 		System.out.println("4. Przypisz zadania");
-		int ans=scan.nextInt();
-			if(ans==1) {
+		System.out.println("5. Wyjdz z programu");
+		switch(scan.nextInt()) {
+		case 1:  {
 				System.out.println();
 				System.out.println("Lista wszystkich uzytkownikow: ");
 				User [] usr;
 				try {
-					usr = User.loadAllUsers(conn);
+					usr = User.loadAllUsers();
 					for(User us: usr) System.out.println(us.toString());
 				} catch (SQLException e) {}
 				System.out.println();
@@ -42,25 +35,26 @@ public static void main(String[] args) {
 				System.out.println("2. Edytuj uzytkownika");
 				System.out.println("3. Usun uzytkownika");
 				System.out.println("4. Powrot do menu");
-					ans=scan.nextInt();
-					if(ans==1) {
+					switch(scan.nextInt()) {
+					case 1: {
 						ManageUsers.add();
 					}
-					else if(ans==2) {
+					case 2: {
 						ManageUsers.edit();
 					}
-					else if(ans==3) {
+					case 3: {
 						ManageUsers.delete();
 					}
-					else if(ans==4) {
+					case 4: {
+					}
 					}
 			}
-			else if(ans==2) {
+		case 2:  {
 					System.out.println();
 					System.out.println("Lista wszystkich zadan: ");
 					Exercise[] exc;
 					try {
-						exc = Exercise.loadAllExercise(conn);
+						exc = Exercise.loadAllExercise();
 						for(Exercise exercise: exc) System.out.println(exercise.toString());
 					} catch (SQLException e) {}
 					System.out.println();
@@ -69,25 +63,26 @@ public static void main(String[] args) {
 					System.out.println("2. Edytuj zadanie");
 					System.out.println("3. Usun zadanie");
 					System.out.println("4. Powrot do menu");
-					ans=scan.nextInt();
-					if(ans==1) {
+					switch(scan.nextInt()) {
+					case 1: {
 						ManageExercise.add();
 					}
-					else if(ans==2) {
+					case 2: {
 						ManageExercise.edit();
 					}
-					else if(ans==3) {
+					case 3: {
 						ManageExercise.delete();
 					}
-					else if(ans==4) {
+					case 4: {
+					}
 					}
 			}
-			else if (ans==3) {
+		case 3:  {
 					System.out.println();
 					System.out.println("Lista wszystkich grup: ");
 					Groups [] group;
 					try {
-						group = Groups.loadAllGroups(conn);
+						group = Groups.loadAllGroups();
 						for(Groups gr: group) System.out.println(gr.toString());
 					} catch (SQLException e) {}
 					System.out.println();
@@ -96,51 +91,58 @@ public static void main(String[] args) {
 					System.out.println("2. Edytuj grupe");
 					System.out.println("3. Usun grupe");
 					System.out.println("4. Powrot do menu");
-					ans=scan.nextInt();
-					if(ans==1) {
+					switch(scan.nextInt()) {
+					case 1: {
 						ManageGroup.add();
 					}
-					else if(ans==2) {
+					case 2: {
 						ManageGroup.edit();
 					}
-					else if(ans==3) {
+					case 3: {
 						ManageGroup.delete();
 					}
-					else if(ans==4) {
+					case 4: {
+					}
 					}
 					
 			}
-			else if (ans==4) {
+		case 4: {
 					System.out.println("Przypisywanie zadan");
 					System.out.println("1. Dodaj zadanie do uzytkownika");
 					System.out.println("2. Dodaj zadanie do grupy uzytkownikow");
 					System.out.println("3. Przeglad rozwiazan");
 					System.out.println("4. Powrot do menu");
-					ans=scan.nextInt();
-					if(ans==1) {
+					switch(scan.nextInt()) {
+					case 1: {
 						ManageSolution.addToUser();
 					}
-					else if(ans==2) {
+					case 2: {
 						ManageSolution.addToGroup();
 					}
-					else if(ans==3) {
+					case 3: {
 						System.out.println();
 						System.out.println("Przeglad rozwiazan");
 						System.out.println("1. Przeglad rozwiazan wybranego uzytkownika");
 						System.out.println("2. Przeglad rozwiazan grupy uzytkownikow");
-						ans=scan.nextInt();
-						if(ans==1) {
-							ManageSolution.selectAllForUser();
-						}
-						else if(ans==2) {
-							ManageSolution.selectAllForGroup();
-						}
+							switch(scan.nextInt()) {
+							case 1: {
+								ManageSolution.selectAllForUser();
+							}
+							case 2: {
+								ManageSolution.selectAllForGroup();
+							}
+							}
 					}
-					else if(ans==4) {
+					case 4: {
+					
 					}
+					}
+				}
+		case 5: {	
+				break;
 			}
 		}
+		scan.close();
 	}
-	
 }
 }

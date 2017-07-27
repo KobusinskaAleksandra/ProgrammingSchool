@@ -1,11 +1,13 @@
 package pl.coderslab.examples.programmingschool.model;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
+
+import pl.coderslab.examples.programmingschool.Connect;
+
 
 public class Solution {
 	private int id;
@@ -82,14 +84,15 @@ public class Solution {
 		this.users_id = users_id;
 	}
 	
-	public void saveToDB(Connection	conn) throws SQLException {
+	public void saveToDB() throws SQLException {
 		if	(this.id == 0) {
 			String sql = "INSERT INTO Solution (created, updated, description, exercise_id, users_id) VALUES (?,?,?,?,?);";
 			String generatedColumns[] = {"ID"};
 			PreparedStatement preparedStatement; 
-			preparedStatement = conn.prepareStatement(sql, generatedColumns); 
-			preparedStatement.setDate(1, this.created);
-			preparedStatement.setDate(2, this.updated);
+			preparedStatement = Connect.connect().prepareStatement(sql, generatedColumns);
+			java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
+			preparedStatement.setDate(1, sqlDate);
+			preparedStatement.setDate(2, null);
 			preparedStatement.setString(3, this.description);
 			preparedStatement.setInt(4, this.exercise_id);
 			preparedStatement.setInt(5, this.users_id);
@@ -100,12 +103,23 @@ public class Solution {
 			}
 			preparedStatement.close();
 			}
+		else {
+			String	sql	= "UPDATE Solution SET updated=Now(), description=? WHERE exercise_id=? AND users_id=?;";
+			PreparedStatement	preparedStatement;
+			preparedStatement	=	Connect.connect().prepareStatement(sql);
+			preparedStatement.setString(1,	this.description);
+			preparedStatement.setInt(2,	this.id);
+			preparedStatement.setInt(3, this.id);
+			preparedStatement.setInt(4, this.users_id);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			}
 		}
 
-		static public Solution loadSolutionById(Connection conn, int id) throws SQLException {
+		static public Solution loadSolutionById(int id) throws SQLException {
 			String sql = "SELECT * FROM	Solution where id=?";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
@@ -120,11 +134,11 @@ public class Solution {
 			return	null;
 		}
 		
-		static	public Solution[] loadAllSolution(Connection conn) throws SQLException	{
+		static	public Solution[] loadAllSolution() throws SQLException	{
 			ArrayList<Solution> solution = new ArrayList<Solution>();
 			String	sql	= "SELECT * FROM Solution";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				Solution loadedSolution = new Solution();
@@ -140,22 +154,22 @@ public class Solution {
 			return uArray;
 		}
 
-		public void delete(Connection conn) throws SQLException	{
+		public void delete() throws SQLException	{
 			if (this.id != 0) {
 				String	sql	= "DELETE FROM Solution WHERE id= ?";
 				PreparedStatement preparedStatement;
-				preparedStatement = conn.prepareStatement(sql);
+				preparedStatement = Connect.connect().prepareStatement(sql);
 				preparedStatement.setInt(1, this.id);
 				preparedStatement.executeUpdate();
 				this.id=0;
 			}
 		}		
 
-		static public Solution[] loadAllByUserId (Connection conn, int id) throws SQLException	{
+		static public Solution[] loadAllByUserId (int id) throws SQLException	{
 			ArrayList<Solution> userSolution = new ArrayList<Solution>();
-			String	sql	= "SELECT * FROM Solution where user_id=?";
+			String	sql	= "SELECT * FROM Solution where users_id=?";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
@@ -173,13 +187,11 @@ public class Solution {
 			return uArray;
 		}
 		
-		
-
-		static public Solution[] loadAllByExerciseId (Connection conn, int id) throws SQLException	{
+		static public Solution[] loadAllByGroupId (int id) throws SQLException	{
 			ArrayList<Solution> exerciseSolution = new ArrayList<Solution>();
-			String	sql	= "SELECT * FROM Solution where exercise_id=?";
+			String	sql	= "SELECT * FROM Solution LEFT JOIN Users ON Solution.users_id=Users.id WHERE Users.person_group_id=?;";
 			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement = Connect.connect().prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
@@ -196,6 +208,56 @@ public class Solution {
 			uArray	=	exerciseSolution.toArray(uArray);
 			return uArray;
 			}
+		
+
+		static public Solution[] loadAllByExerciseId (int id) throws SQLException	{
+			ArrayList<Solution> exerciseSolution = new ArrayList<Solution>();
+			String	sql	= "SELECT * FROM Solution where exercise_id=?";
+			PreparedStatement preparedStatement;
+			preparedStatement = Connect.connect().prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Solution loadedExerciseSolution = new Solution();
+					loadedExerciseSolution.id = resultSet.getInt("id");
+					loadedExerciseSolution.created = resultSet.getDate("created");
+					loadedExerciseSolution.updated = resultSet.getDate("updated");
+					loadedExerciseSolution.description = resultSet.getString("description");
+					loadedExerciseSolution.exercise_id = resultSet.getInt("exercise_id");
+					loadedExerciseSolution.users_id = resultSet.getInt("users_id");
+					exerciseSolution.add(loadedExerciseSolution);
+			}
+			Solution[]	uArray	=	new	Solution[exerciseSolution.size()];
+			uArray	=	exerciseSolution.toArray(uArray);
+			return uArray;
+			}
+		
+		static public Solution[] loadAllDone (int id) throws SQLException	{
+			ArrayList<Solution> userSolution = new ArrayList<Solution>();
+			String	sql	= "SELECT * FROM Exercise RIGHT JOIN Solution ON Exercise.id=exercise_id WHERE users_id=? AND updated IS NOT NULL";
+			PreparedStatement preparedStatement;
+			preparedStatement = Connect.connect().prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Solution loadedUserSolution = new Solution();
+					loadedUserSolution.id = resultSet.getInt("users_id");
+					loadedUserSolution.created = resultSet.getDate("created");
+					loadedUserSolution.updated = resultSet.getDate("updated");
+					loadedUserSolution.description = resultSet.getString("description");				
+					loadedUserSolution.exercise_id = resultSet.getInt("exercise_id");
+					
+					userSolution.add(loadedUserSolution);
+			}
+			Solution[]	uArray	=	new	Solution[userSolution.size()];
+			uArray	=	userSolution.toArray(uArray);
+			return uArray;
+		}
+
+	@Override
+	public String toString () {
+		return "updated: " + updated + " description: " + description + " excersise: " + this.exercise_id + " user: " + this.users_id; 
+	}
 }
 		
 		
